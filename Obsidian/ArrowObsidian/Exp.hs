@@ -594,13 +594,15 @@ instance Choice (Exp a) where
     ifThenElse (E (LitBool False)) e1 e2  = e2
     ifThenElse b e1 e2 = typ3 If b e1 e2
 
-instance Choice (Exp a,Exp b) where 
-    ifThenElse a (b,b') (c,c') = (typ3 If a b c ,typ3 If a b' c')
+instance (Choice a, Choice b) => Choice (a,b) where 
+  ifThenElse b (e1,e1')  (e2,e2') = (ifThenElse b e1 e2, 
+                                     ifThenElse b e1' e2') 
 
-instance Choice (Exp a,Exp b,Exp c) where 
-    ifThenElse a (b,b',b'') (c,c',c'') = 
-        ( typ3 If a b c, typ3 If a b' c', typ3 If a b'' c'')
-
+instance (Choice a, Choice b, Choice c)  => Choice (a,b,c) where 
+  ifThenElse b (e1,e1',e1'')  (e2,e2',e2'') = 
+    (ifThenElse b e1 e2, 
+     ifThenElse b e1' e2',
+     ifThenElse b e1'' e2'') 
 
 
 caseof a [(v,x)]    = x

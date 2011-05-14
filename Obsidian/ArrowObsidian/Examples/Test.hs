@@ -1,4 +1,4 @@
-
+{-# LANGUAGE TypeOperators #-}
 
 {- 
    Test.hs
@@ -9,12 +9,13 @@
 
 -}
 
-module Test where 
+module Obsidian.ArrowObsidian.Examples.Test where 
 
-import Obsidian
+import Obsidian.ArrowObsidian
+import Obsidian.ArrowObsidian.PureAPI
 
 import Prelude hiding (foldr,zipWith)
-import PureAPI
+
 
 import Data.Foldable
 import Data.Bits
@@ -127,7 +128,7 @@ sortB n = two (sortB (n-1)) ->- pure reverseHalf ->-
 -------------------------------------------------------------------------------- 
 -- Comparator etc
 -------------------------------------------------------------------------------- 
-cmp :: (Ordered a, Choice (a, a)) => (a, a) -> (a, a)
+cmp :: (Ordered a, Choice a) => (a, a) -> (a, a)
 cmp (a,b) = ifThenElse (a <* b)  (a,b) (b,a)
 
 apa :: Arr IntE :-> Arr IntE
@@ -197,7 +198,7 @@ reduce n f = pure op ->- sync ->- reduce (n-1) f
 
 reduce' :: Flatten a => Int -> (a -> a -> a) -> Arr a :-> Arr a
 reduce' 0 f = pure id 
-reduce' n f = pure halve ->- Test.zipWith (uncurry f) ->- sync ->- reduce' (n-1) f 
+reduce' n f = pure halve ->- zipWith (uncurry f) ->- sync ->- reduce' (n-1) f 
   
 
 
