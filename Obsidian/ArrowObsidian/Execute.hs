@@ -163,7 +163,7 @@ rest str isize osize nthreads sm =
              "  cudaMalloc((void**)&dvalues, sizeof(word) * "++ show isize ++" ); \n" ++
              "  cudaMalloc((void**)&dresult, sizeof(word) * "++ show osize ++" ); \n" ++
              "  cudaMemcpy(dvalues, values, sizeof(word) * " ++ show isize ++", cudaMemcpyHostToDevice);\n" ++
-             "  " ++ runKernel "generated" nthreads sm osize ++ 
+             "  " ++ runKernel "generated" nthreads sm {- osize -}  ++ 
              "  cudaMemcpy(result, dresult, sizeof(word) * "++ show osize ++" , cudaMemcpyDeviceToHost);\n" ++
              "  cudaFree(dvalues);\n" ++
              "  cudaFree(dresult);\n" ++
@@ -283,9 +283,9 @@ cmain str = "int main(int argc, char **argv){\n" ++ str ++ "\n}\n"
        
 
 -- -----------------------------------------------------------------------------
-runKernel :: String -> Int -> Int -> Int -> String 
-runKernel name threads sm olen = name ++ "<<<1, " ++ show threads ++ 
-                          "," ++ show sm ++ "* sizeof(unsigned int)>>>(dvalues,dresult," ++ show olen ++ ");\n"
+runKernel :: String -> Int -> Int {- -> Int -}  -> String 
+runKernel name threads sm {- olen -} = name ++ "<<<1, " ++ show threads ++ 
+                          "," ++ show sm ++ "* sizeof(unsigned int)>>>(dvalues,dresult" {- ++ ", " ++  show olen -} ++ ");\n"
 
 
 strListToCArrayStr :: [String] -> String 

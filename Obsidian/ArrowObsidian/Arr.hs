@@ -21,7 +21,7 @@ instance Show a => Show (Arr a) where
 
                      
 instance Functor Arr where
-    fmap f (Arr ixf n) = Arr (\ix -> f (ixf ix)) n
+    fmap f arr = mkArr (\ix -> f (arr ! ix)) (len arr)
 
 instance Eq a => Eq (Arr a) where 
     (==) a1 a2 = len a1 == len a2 && 

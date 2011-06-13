@@ -95,7 +95,7 @@ class Output a where
 
 instance Output (Arr FData) where 
     fixOffsets arr nomSize = fmap (addOffset nomSize) arr 
-    output _ = do n <- incr; return ("word* result" ++ show n ++ ",int n" ++ show n)
+    output _ = do n <- incr; return ("word* result" ++ show n {- ++ ",int n" ++ show n  -} ) 
     writeOutput arr nt  = 
         do 
           n <- incr
